@@ -535,18 +535,20 @@ export class Pager extends PagerBase {
 
     public _removeContainer(cell: PagerCell,
                             indexPath?: NSIndexPath): void {
-        let view = cell.view;
+        let view = cell ? cell.view : null;
 
-        let args = <ItemEventData>{
-            eventName: ITEMDISPOSING,
-            object: this,
-            index: indexPath.row,
-            android: undefined,
-            ios: cell,
-            view: view
-        };
-        this.notify(args);
-        view = args.view;
+        if (indexPath && indexPath.row) {
+          let args = <ItemEventData>{
+              eventName: ITEMDISPOSING,
+              object: this,
+              index: indexPath.row,
+              android: undefined,
+              ios: cell,
+              view: view
+          };
+          this.notify(args);
+          view = args.view;
+        }
         if (view && view.parent) {
             // This is to clear the StackLayout that is used to wrap ProxyViewContainer instances.
             if (!(view.parent instanceof Pager)) {
